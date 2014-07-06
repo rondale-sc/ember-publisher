@@ -1,0 +1,25 @@
+{
+  "name": "ember-publisher",
+  "version": "0.0.0",
+  "description": "This is a micro-lib designed to help unify s3 publishing for Ember and related Ember projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rondale-sc/ember-publisher.git"
+  },
+  "keywords": [
+    "ember"
+  ],
+  "author": "Jonathan Jackson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rondale-sc/ember-publisher/issues"
+  },
+  "homepage": "https://github.com/rondale-sc/ember-publisher",
+  "devDependencies": {
+    "aws-sdk": "^2.0.4"
+  }
+}
