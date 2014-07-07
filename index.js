@@ -18,7 +18,13 @@ function S3Publisher(options){
     throw new Error("You must specify a project config to use!");
   }
 
-  this.projectFileMap = require("./project_configs/" + options.PROJECT+ "-proj");
+  var projectPath = "./project_configs/" + options.PROJECT+ "-proj"
+
+  if(!fs.existsSync(projectPath)) {
+    throw new Error("Your specified project path isn't available");
+  }
+
+  this.projectFileMap = require(projectPath);
 
   if (!this.S3_BUCKET_NAME || !this.S3_ACCESS_KEY_ID || !this.S3_SECRET_ACCESS_KEY) {
     throw new Error('No AWS credentials exist.');
