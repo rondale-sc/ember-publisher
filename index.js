@@ -17,7 +17,7 @@ function S3Publisher(options){
   if(!options.project) {
     throw new Error("You must specify a project config to use!");
   }
-  var projectPath = "./project_configs/" + options.project + "-proj.js";
+  var projectPath = path.join(__dirname, "project_configs", options.project + "-proj.js");
   if(!fs.existsSync(projectPath)) {
     throw new Error("Your specified project path isn't available");
   }

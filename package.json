@@ -1,6 +1,6 @@
 {
   "name": "ember-publisher",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "This is a micro-lib designed to help unify s3 publishing for Ember and related Ember projects.",
   "main": "index.js",
   "scripts": {
