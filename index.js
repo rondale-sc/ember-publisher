@@ -62,28 +62,29 @@ S3Publisher.prototype.currentBranch = function(){
   }[this.CURRENT_BRANCH] || process.env.BUILD_TYPE;
 };
 
+S3Publisher.prototype.uploader = function(destination, file, files) {
+  function finished(err,result) { if(err) { throw Error("Upload failed with error: " + err); } }
+  var filePath = path.join(process.cwd(), "dist", file);
+
+  if(!fs.existsSync(filePath)) {
+    throw new Error("FilePath: '" + filePath + "' doesn't exist!");
+  }
+  filePath = fs.realpathSync(filePath);
+
+  var data = fs.readFileSync(filePath);
+  this.uploadFile(data, files[file].contentType, destination, finished);
+}
+
 S3Publisher.prototype.publish  = function() {
   var files = this.projectFileMap(this.CURRENT_REVISION, this.TAG, date);
-
-  function finished(err,result) { if(err) { throw Error("Upload failed with error: " + err); } }
-
-  var uploader = function(destination) {
-    var filePath = path.join(process.cwd(), "dist", file);
-
-      if(!fs.existsSync(filePath)) {
-        throw new Error("FilePath: '" + filePath + "' doesn't exist!");
-      }
-      filePath = fs.realpathSync(filePath);
-
-      var data = fs.readFileSync(filePath);
-      this.uploadFile(data, files[file].contentType, destination, finished);
-    }.bind(this);
 
   for(var file in files) {
     var localDests = files[file].destinations[this.currentBranch()]
     if(localDests.length <= 0) { throw Error("There are no locations for this branch") };
 
-    localDests.forEach(uploader);
+    localDests.forEach(function(destination) {
+      this.uploader(destination, file, files);
+    }.bind(this));
   }
 };
 
