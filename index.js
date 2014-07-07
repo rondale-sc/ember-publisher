@@ -7,18 +7,21 @@ var date =  new Date().toISOString().replace(/-/g, '').replace(/T.+/, '');
 function S3Publisher(options){
   options = options || {};
 
-  this.setOption(options, 'S3_BUCKET_NAME');
-  this.setOption(options, 'TRAVIS_BRANCH', 'CURRENT_BRANCH');
-  this.setOption(options, 'TRAVIS_TAG', 'TAG');
-  this.setOption(options, 'TRAVIS_COMMIT', 'CURRENT_REVISION');
-  this.setOption(options, 'S3_ACCESS_KEY_ID');
-  this.setOption(options, 'S3_SECRET_ACCESS_KEY');
+  setOption(this, options, 'S3_BUCKET_NAME');
+  setOption(this, options, 'TRAVIS_BRANCH', 'CURRENT_BRANCH');
+  setOption(this, options, 'TRAVIS_TAG', 'TAG');
+  setOption(this, options, 'TRAVIS_COMMIT', 'CURRENT_REVISION');
+  setOption(this, options, 'S3_ACCESS_KEY_ID');
+  setOption(this, options, 'S3_SECRET_ACCESS_KEY');
 
-  if(!options.PROJECT) {
+  if(!options.project) {
     throw new Error("You must specify a project config to use!");
   }
-
-  this.projectFileMap = require("./project_configs/" + options.PROJECT+ "-proj");
+  var projectPath = "./project_configs/" + options.project + "-proj.js";
+  if(!fs.existsSync(projectPath)) {
+    throw new Error("Your specified project path isn't available");
+  }
+  this.projectFileMap = require(projectPath);
 
   if (!this.S3_BUCKET_NAME || !this.S3_ACCESS_KEY_ID || !this.S3_SECRET_ACCESS_KEY) {
     throw new Error('No AWS credentials exist.');
@@ -28,13 +31,13 @@ function S3Publisher(options){
   this.s3 = new AWS.S3();
 }
 
-S3Publisher.prototype.setOption = function(options, defaultPropName, setPropName){
+function setOption(object, options, defaultPropName, setPropName){
   if(!setPropName) { setPropName = defaultPropName};
 
   if (options.hasOwnProperty(defaultPropName)) {
-    this[setPropName] = options[defaultPropName];
+    object[setPropName] = options[defaultPropName];
   } else {
-    this[setPropName] = process.env[defaultPropName];
+    object[setPropName] = process.env[defaultPropName];
   }
 };
 
@@ -85,3 +88,4 @@ S3Publisher.prototype.publish  = function() {
 };
 
 module.exports = S3Publisher;
+module.exports.setOption = setOption;
