@@ -3,7 +3,6 @@ var assert = require("assert");
 
 describe('ember.projectFileMap', function(){
   it('returns appropriate locations for master', function(){
-    var uploadFileLocations = [];
     var date =  new Date().toISOString().replace(/-/g, '').replace(/T.+/, '');
 
 
@@ -51,7 +50,14 @@ describe('ember.projectFileMap', function(){
       'canary/shas/foo-commit/ember-docs.json',
       'tags/foo-tag/ember-docs.json' ];
 
-    publisher.publish();
+    var files = projectFileMap('foo-commit', 'foo-tag', date);
+    var uploadFileLocations = [];
+
+    for (var file in files) {
+      files[file].destinations.canary.forEach(function(destination){
+        uploadFileLocations.push(destination);
+      });
+    }
     assert.deepEqual(expectedLocations, uploadFileLocations, "Destinations were not correct.");
   });
 })
