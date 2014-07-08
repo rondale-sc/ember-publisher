@@ -34,12 +34,15 @@ function fileObject(baseName, extension, contentType, currentRevision, tag, date
           "beta" + fullName,
           "beta/daily/" + date + fullName,
           "beta/shas/" + currentRevision + fullName
-        ]
+        ],
+        wildcard: []
       }
    };
 
-   for( var key in obj.destinations) {
-     if(tag) { obj.destinations[key].push("tags/" + tag + fullName); }
+   if (tag) {
+     for (var key in obj.destinations) {
+       obj.destinations[key].push("tags/" + tag + fullName);
+     }
    }
 
    return obj;

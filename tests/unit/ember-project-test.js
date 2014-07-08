@@ -2,10 +2,8 @@ var projectFileMap = require("../../project_configs/ember-proj");
 var assert = require("assert");
 
 describe('ember.projectFileMap', function(){
+  var date =  new Date().toISOString().replace(/-/g, '').replace(/T.+/, '');
   it('returns appropriate locations for master', function(){
-    var date =  new Date().toISOString().replace(/-/g, '').replace(/T.+/, '');
-
-
     expectedLocations = [
       'ember-latest.js',
       'latest/ember.js',
@@ -58,6 +56,27 @@ describe('ember.projectFileMap', function(){
         uploadFileLocations.push(destination);
       });
     }
+    assert.deepEqual(expectedLocations, uploadFileLocations, "Destinations were not correct.");
+  });
+
+  it('when tag is present wildcard section has appropriate tag url', function(){
+    var files = projectFileMap('foo-commit', 'foo-tag', date);
+    var uploadFileLocations = [];
+    var expectedLocations = [
+      'tags/foo-tag/ember.js',
+      'tags/foo-tag/ember-test.js',
+      'tags/foo-tag/ember-template-compiler.js',
+      'tags/foo-tag/ember-runtime.js',
+      'tags/foo-tag/ember.min.js',
+      'tags/foo-tag/ember.prod.js',
+      'tags/foo-tag/ember-docs.json' ];
+
+    for (var file in files) {
+      files[file].destinations.wildcard.forEach(function(destination){
+        uploadFileLocations.push(destination);
+      });
+    }
+
     assert.deepEqual(expectedLocations, uploadFileLocations, "Destinations were not correct.");
   });
 })

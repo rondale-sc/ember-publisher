@@ -16,6 +16,7 @@ Each project using Ember Publisher needs a file in `project_configs` that gives 
 
 Each key should be the name of the file in the `dist` folder of the project.  `destinations` should contain a key for each channel you'd like to publish to whose value is an array of bucket urls.  See `project_configs/ember-proj.js` for more details.
 
+- `wildcard` - is the fallback channel.  It can be implemented per project or not.  For example, if I wanted to publish any tagged push.  I could implement a wildcard entry inside destinations ( should be empty by default ) and merge in s3 bucket urls if a tag is present.  Then when no branch is found the wildcard would be used which would (in this case) contain the tag s3 buck urls.  You can see an example of this inside ember.js' project config.
 
 # Assumptions
 
@@ -27,9 +28,13 @@ You _MUST_ have the following defined in your environment to execute publishing 
 - `TRAVIS_COMMIT`
 - `S3_ACCESS_KEY_ID`
 - `S3_SECRET_ACCESS_KEY`
-- `project` - this is the word that when suffixed with `proj.js` points to a file in `project_configs`.  (ie `ember` would yield `project_configs/ember-proj.js`.
 
 The `TRAVIS` prefixed variables are set by travis-ci by default so you shouldn't worry about those unless you are running locally.
+
+# Constructor
+
+`project` - this is the word that when suffixed with `proj.js` points to a file in `project_configs`.  (ie `ember` would yield `project_configs/ember-proj.js`.
+
 
 # Channels
 
