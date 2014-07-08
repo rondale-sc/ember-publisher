@@ -76,16 +76,25 @@ S3Publisher.prototype.uploader = function(destination, file, files) {
 }
 
 S3Publisher.prototype.publish  = function() {
-  var files = this.projectFileMap(this.CURRENT_REVISION, this.TAG, date);
+  try {
+    var files = this.projectFileMap(this.CURRENT_REVISION, this.TAG, date);
 
-  for(var file in files) {
-    var localDests = files[file].destinations[this.currentBranch() || 'wildcard']
+    for(var file in files) {
+      var localDests = files[file].destinations[this.currentBranch() || 'wildcard'];
 
-    if(!localDests) { throw new Error(this.currentBranch() + ': is not a supported branch and no wildcard entry has been specified') }
-    if(!localDests.length) { throw new Error('There are no locations for this branch') };
+      if(!localDests) { throw new Error(this.currentBranch() + ': is not a supported branch and no wildcard entry has been specified') }
+      if(!localDests.length) { throw new Error('There are no locations for this branch') };
 
-    localDests.forEach(function(destination) { this.uploader(destination, file, files); }.bind(this));
+      localDests.forEach(function(destination) { this.uploader(destination, file, files); }.bind(this));
+    }
+  } catch (err) {
+    exitGracefully(err);
   }
+};
+
+function exitGracefully(err) {
+  console.log(err);
+  process.exit(1);
 };
 
 module.exports = S3Publisher;
