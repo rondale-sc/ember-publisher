@@ -63,7 +63,7 @@ S3Publisher.prototype.currentBranch = function(){
 };
 
 S3Publisher.prototype.uploader = function(destination, file, files) {
-  function finished(err,result) { if(err) { throw Error("Upload failed with error: " + err); } }
+  function finished(err,result) { if(err) { throw new Error("Upload failed with error: " + err); } }
   var filePath = path.join(process.cwd(), "dist", file);
 
   if(!fs.existsSync(filePath)) {
@@ -79,12 +79,12 @@ S3Publisher.prototype.publish  = function() {
   var files = this.projectFileMap(this.CURRENT_REVISION, this.TAG, date);
 
   for(var file in files) {
-    var localDests = files[file].destinations[this.currentBranch()]
-    if(localDests.length <= 0) { throw Error("There are no locations for this branch") };
+    var localDests = files[file].destinations[this.currentBranch() || 'wildcard']
 
-    localDests.forEach(function(destination) {
-      this.uploader(destination, file, files);
-    }.bind(this));
+    if(!localDests) { throw new Error(this.currentBranch() + ': is not a supported branch and no wildcard entry has been specified') }
+    if(!localDests.length) { throw new Error('There are no locations for this branch') };
+
+    localDests.forEach(function(destination) { this.uploader(destination, file, files); }.bind(this));
   }
 };
 
