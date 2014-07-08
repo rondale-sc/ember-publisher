@@ -1,8 +1,8 @@
 module.exports = function(revision, tag, date){
   return {
     'ember-data.js': fileObject('ember-data', '.js', 'text/javascript', revision, tag, date),
-    'ember-data.min': fileObject('ember-data.min', '.js', 'text/javascript', revision, tag, date),
-    'ember-data.prod': fileObject('ember-data.prod', '.js', 'text/javascript', revision, tag, date)
+    'ember-data.min.js': fileObject('ember-data.min', '.js', 'text/javascript', revision, tag, date),
+    'ember-data.prod.js': fileObject('ember-data.prod', '.js', 'text/javascript', revision, tag, date)
   }
 }
 
