@@ -31,15 +31,6 @@ function S3Publisher(options){
   this.s3 = new AWS.S3();
 }
 
-function setOption(object, options, defaultPropName, setPropName){
-  if(!setPropName) { setPropName = defaultPropName};
-
-  if (options.hasOwnProperty(defaultPropName)) {
-    object[setPropName] = options[defaultPropName];
-  } else {
-    object[setPropName] = process.env[defaultPropName];
-  }
-};
 
 S3Publisher.prototype.uploadFile = function(data, type, destination, callback) {
   console.log("Type: " + type);
@@ -89,6 +80,16 @@ S3Publisher.prototype.publish  = function() {
     }
   } catch (err) {
     exitGracefully(err);
+  }
+};
+
+function setOption(object, options, defaultPropName, setPropName){
+  if(!setPropName) { setPropName = defaultPropName};
+
+  if (options.hasOwnProperty(defaultPropName)) {
+    object[setPropName] = options[defaultPropName];
+  } else {
+    object[setPropName] = process.env[defaultPropName];
   }
 };
 
