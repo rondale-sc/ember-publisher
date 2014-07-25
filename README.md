@@ -1,5 +1,7 @@
 # Ember Publisher
 
+[![Build Status](https://travis-ci.org/rondale-sc/ember-publisher.svg?branch=master)](https://travis-ci.org/rondale-sc/ember-publisher)
+
 This is a micro-lib designed to help unify s3 publishing for Ember and related Ember projects.
 
 Each project using Ember Publisher needs a file in `project_configs` that gives information about how it'll be published to S3.  That project file needs to export a function that returns an object that looks like this:
