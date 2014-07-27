@@ -6,8 +6,8 @@ describe('rsvp.projectFileMap', function(){
     expectedLocations = [
       'rsvp-latest.js',
       'rsvp-foo-commit.js',
-      'rsvp-latest.amd.js',
-      'rsvp-foo-commit.amd.js'
+      'rsvp-latest.min.js',
+      'rsvp-foo-commit.min.js'
     ];
 
     var files = projectFileMap('foo-commit', 'foo-tag');
