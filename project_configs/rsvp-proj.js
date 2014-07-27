@@ -13,12 +13,12 @@ module.exports = function(revision,tag,date){
           ]
         }
       },
-    'rsvp.amd.js':
+    'rsvp.min.js':
       { contentType: 'text/javascript',
         destinations: {
           wildcard: [
-            'rsvp-latest.amd.js',
-            'rsvp-' + revision + '.amd.js'
+            'rsvp-latest.min.js',
+            'rsvp-' + revision + '.min.js'
           ]
         }
       }
