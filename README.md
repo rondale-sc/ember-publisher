@@ -37,6 +37,9 @@ The `TRAVIS` prefixed variables are set by travis-ci by default so you shouldn't
 
 `project` - this is the word that when suffixed with `proj.js` points to a file in `project_configs`.  (ie `ember` would yield `project_configs/ember-proj.js`.
 
+`projectConfigPath` - It is now possible to specify the absolute path of your project's config by setting setting `projectConfigPath`.  This will take precedence above the `project` property (see above)
+
+In the above case, if the current branch is master then it will utilize the wildcard destinations.  The `no-op` branch is to ensure that it doesn't default to the `wildcard` branch.
 
 # Channels
 
@@ -47,3 +50,14 @@ Currently the supported channels are as follows
 - beta -> beta
 - stable -> release
 - release -> release
+
+## Utilize wildcard set of destinations
+
+Override channels by overriding the currenBranch function on your instance of publisher.  Like so:
+
+```js
+  publisher.currentBranch = function() {
+    return (TRAVIS_BRANCH === 'master') ? 'wildcard' : 'no-op';
+  };
+```
+

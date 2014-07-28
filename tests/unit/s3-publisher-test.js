@@ -1,6 +1,7 @@
 var Publisher = require('../../index.js');
 var setOption = require('../../index.js').setOption;
 var assert    = require('assert');
+var path      = require('path');
 
 describe('S3Publisher', function(){
   describe('setOption', function(){
@@ -64,14 +65,31 @@ describe('S3Publisher', function(){
         assert.throws(function(){ new Publisher(defaultOptions) }, /No AWS credentials exist./)
       });
 
-      it('errors when project is absent from options', function(){
-        defaultOptions.project = undefined;
-        assert.throws(function(){ new Publisher(defaultOptions); }, /must specify a project config/)
+      describe("no project name provided", function(){
+        it('errors when projectConfigPath  is absent from options', function(){
+          defaultOptions.project = undefined;
+          assert.throws(function(){ new Publisher(defaultOptions); }, /must specify a project config/)
+        });
+
+        it('uses projectConfigPath when provided', function(){
+          defaultOptions.project = undefined;
+          defaultOptions.projectConfigPath = path.join(__dirname, '../fixtures/example-proj.js');
+          var result = new Publisher(defaultOptions).projectFileMap();
+          assert.equal(Object.keys(result)[0], 'ember-data.js');
+        });
       });
 
-      it('errors when projectPath does not exist', function(){
-        defaultOptions.project = 'non-existent-project-config';
-        assert.throws(function() { new Publisher(defaultOptions) }, /path isn't available/);
+      describe("project name provided", function(){
+        it('uses project when projectConfigPath is not set', function(){
+          var result = new Publisher(defaultOptions).projectFileMap();
+          assert.equal(Object.keys(result)[0], 'ember.js');
+        });
+
+        it('uses projectConfigPath when provided', function(){
+          defaultOptions.projectConfigPath = path.join(__dirname, '../fixtures/example-proj.js');
+          var result = new Publisher(defaultOptions).projectFileMap();
+          assert.equal(Object.keys(result)[0], 'ember-data.js');
+        })
       });
     });
   });
