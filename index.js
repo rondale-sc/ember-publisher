@@ -41,6 +41,7 @@ S3Publisher.prototype.uploadFile = function(data, type, destination, callback) {
     Body: data,
     Bucket: this.S3_BUCKET_NAME,
     ContentType: type,
+    ACL: 'public-read',
     Key: destination
   }, callback);
 };
